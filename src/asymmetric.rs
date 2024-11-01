@@ -8,7 +8,7 @@ use std::{
 use serde::{de::DeserializeOwned, Serialize};
 use type_hash::TypeHash;
 
-
+#[derive(Debug, Clone, Copy)]
 pub struct AsymmetricJointSream<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, ReadWriter: Read + Write,> {
     send_msg_type: PhantomData<SendMessageType>,
     recv_msg_type: PhantomData<RecvMessageType>,
@@ -60,6 +60,7 @@ impl<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, ReadWriter: 
     }
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct AsymmetricSplitStream<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, Reader: Read, Writer: Write> {
     send_msg_type: PhantomData<SendMessageType>,
     recv_msg_type: PhantomData<RecvMessageType>,
@@ -114,6 +115,7 @@ impl<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, Reader: Read
     }
 }
 
+#[derive(Debug)]
 pub struct AsymmetricTcpStream<SendMessageType: Serialize, RecvMessageType: DeserializeOwned> {
     send_msg_type: PhantomData<SendMessageType>,
     recv_msg_type: PhantomData<RecvMessageType>,
