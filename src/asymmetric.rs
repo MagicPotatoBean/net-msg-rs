@@ -3,7 +3,7 @@ use std::{
     hash::{DefaultHasher, Hash, Hasher},
     io::{Read, Write},
     marker::PhantomData,
-    net::TcpStream,
+    net::TcpStream, time::Duration,
 };
 use serde::{de::DeserializeOwned, Serialize};
 use type_hash::TypeHash;
@@ -122,7 +122,11 @@ pub struct AsymmetricTcpStream<SendMessageType: Serialize, RecvMessageType: Dese
     connection: TcpStream,
 }
 impl<SendMessageType: Serialize + TypeHash, RecvMessageType: DeserializeOwned + TypeHash> AsymmetricTcpStream<SendMessageType, RecvMessageType> {
-    pub fn new(mut stream: TcpStream) -> std::io::Result<Self> {
+    pub fn new(mut stream: TcpStream, timeout: Duration) -> std::io::Result<Self> {
+        stream.set_nonblocking(false)?;
+        stream.set_read_timeout(Some(timeout))?;
+
+
         let mut hasher = DefaultHasher::new();
 
         SendMessageType::type_hash().hash(&mut hasher);
