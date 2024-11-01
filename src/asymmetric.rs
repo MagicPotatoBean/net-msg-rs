@@ -9,12 +9,12 @@ use serde::{de::DeserializeOwned, Serialize};
 use type_hash::TypeHash;
 
 
-pub struct AsymmetricalJointSream<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, ReadWriter: Read + Write,> {
+pub struct AsymmetricJointSream<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, ReadWriter: Read + Write,> {
     send_msg_type: PhantomData<SendMessageType>,
     recv_msg_type: PhantomData<RecvMessageType>,
     readwriter: ReadWriter,
 }
-impl<SendMessageType: Serialize + TypeHash, RecvMessageType: DeserializeOwned + TypeHash, ReadWriter: Read + Write> AsymmetricalJointSream<SendMessageType, RecvMessageType, ReadWriter> {
+impl<SendMessageType: Serialize + TypeHash, RecvMessageType: DeserializeOwned + TypeHash, ReadWriter: Read + Write> AsymmetricJointSream<SendMessageType, RecvMessageType, ReadWriter> {
     pub fn new(mut readwriter: ReadWriter) -> std::io::Result<Self> {
         let mut hasher = DefaultHasher::new();
 
@@ -44,7 +44,7 @@ impl<SendMessageType: Serialize + TypeHash, RecvMessageType: DeserializeOwned + 
         }
     }
 }
-impl<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, ReadWriter: Write + Read> AsymmetricalJointSream<SendMessageType, RecvMessageType, ReadWriter> {
+impl<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, ReadWriter: Write + Read> AsymmetricJointSream<SendMessageType, RecvMessageType, ReadWriter> {
     pub fn new_unchecked(readwriter: ReadWriter) -> Self {
         Self {
             send_msg_type: PhantomData::default(),
@@ -60,13 +60,13 @@ impl<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, ReadWriter: 
     }
 }
 
-pub struct AsymmetricalSplitStream<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, Reader: Read, Writer: Write> {
+pub struct AsymmetricSplitStream<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, Reader: Read, Writer: Write> {
     send_msg_type: PhantomData<SendMessageType>,
     recv_msg_type: PhantomData<RecvMessageType>,
     reader: Reader,
     writer: Writer,
 }
-impl<SendMessageType: Serialize + TypeHash, RecvMessageType: DeserializeOwned + TypeHash, Reader: Read, Writer: Write> AsymmetricalSplitStream<SendMessageType, RecvMessageType, Reader, Writer> {
+impl<SendMessageType: Serialize + TypeHash, RecvMessageType: DeserializeOwned + TypeHash, Reader: Read, Writer: Write> AsymmetricSplitStream<SendMessageType, RecvMessageType, Reader, Writer> {
     pub fn new(mut reader: Reader, mut writer: Writer) -> std::io::Result<Self> {
         let mut hasher = DefaultHasher::new();
 
@@ -97,7 +97,7 @@ impl<SendMessageType: Serialize + TypeHash, RecvMessageType: DeserializeOwned + 
         }
     }
 }
-impl<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, Reader: Read, Writer: Write> AsymmetricalSplitStream<SendMessageType, RecvMessageType, Reader, Writer> {
+impl<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, Reader: Read, Writer: Write> AsymmetricSplitStream<SendMessageType, RecvMessageType, Reader, Writer> {
     pub fn new_unchecked(reader: Reader, writer: Writer) -> Self {
         Self {
             send_msg_type: PhantomData::default(),
@@ -114,12 +114,12 @@ impl<SendMessageType: Serialize, RecvMessageType: DeserializeOwned, Reader: Read
     }
 }
 
-pub struct AsymmetricalTcpStream<SendMessageType: Serialize, RecvMessageType: DeserializeOwned> {
+pub struct AsymmetricTcpStream<SendMessageType: Serialize, RecvMessageType: DeserializeOwned> {
     send_msg_type: PhantomData<SendMessageType>,
     recv_msg_type: PhantomData<RecvMessageType>,
     connection: TcpStream,
 }
-impl<SendMessageType: Serialize + TypeHash, RecvMessageType: DeserializeOwned + TypeHash> AsymmetricalTcpStream<SendMessageType, RecvMessageType> {
+impl<SendMessageType: Serialize + TypeHash, RecvMessageType: DeserializeOwned + TypeHash> AsymmetricTcpStream<SendMessageType, RecvMessageType> {
     pub fn new(mut stream: TcpStream) -> std::io::Result<Self> {
         let mut hasher = DefaultHasher::new();
 
@@ -153,7 +153,7 @@ impl<SendMessageType: Serialize + TypeHash, RecvMessageType: DeserializeOwned + 
         }
     }
 }
-impl<SendMessageType: Serialize, RecvMessageType: DeserializeOwned> AsymmetricalTcpStream<SendMessageType, RecvMessageType> {
+impl<SendMessageType: Serialize, RecvMessageType: DeserializeOwned> AsymmetricTcpStream<SendMessageType, RecvMessageType> {
     pub fn new_unchecked(stream: TcpStream) -> Self {
         Self {
             send_msg_type: PhantomData::default(),
